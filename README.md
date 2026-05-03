@@ -30,12 +30,33 @@ In any HTML that needs the API:
     manifestUrl: 'assets/manifest.json',
     storageKeys: { uploads: 'myapp_uploads', overrides: 'myapp_overrides' },
     tagVocab: ['ui','background','decoration','character','effect'],
+    courses:  ['World 1','World 2','World 3'], // labels for the library's "course" filter (UI-only)
   };
 </script>
 <script src="./lib/asset-system/src/asset-manifest.js"></script>
 ```
 
+The script exposes both `window.GPC_ASSETS` (legacy) and `window.AssetSystem` (preferred alias) — they reference the same API object.
+
 For the library page UI, also include `src/assets-library.js`.
+
+## Contract API
+
+| Method                       | Returns           | Notes |
+|------------------------------|-------------------|-------|
+| `list(filter?)`              | `Asset[]`         | Optional `{tags, course, includeHidden}` filter |
+| `get(id)`                    | `Asset \| null`   | Lookup by id |
+| `add(file \| dataUrl, meta)` | `Promise<Asset>`  | `meta = {name?, tags?, course?}` |
+| `update(id, patch)`          | `Asset`           | Persists override; emits `change` |
+| `remove(id)`                 | `boolean`         | Uploads removed; on-disk assets soft-hidden |
+| `on('change', cb)`           | `unsubscribe()`   | Fires on any local mutation |
+| `ready()`                    | `Promise<void>`   | Resolves when manifest fetch settles |
+| `TAG_VOCAB`                  | `string[]`        | Resolved vocab (config or default) |
+
+## Examples
+
+- `examples/assets-library.html` — full library UI as integrated in the golf game.
+- `examples/standalone.html` — minimal page using only the manifest API with a custom vocab; no host project needed. Open via a static server: `python3 -m http.server -d examples 8080`.
 
 ## Generate the manifest
 
@@ -47,7 +68,7 @@ node lib/asset-system/scripts/scan-assets.js
 
 ## Status
 
-Initial extract from golf-paper-craft @ 2026-05-03. The library UI still references a small page-list (`COURSES = ['C1'..'C6']`) that is golf-flavored; consumers can override by editing or PR a config option.
+Initial extract from golf-paper-craft @ 2026-05-03. The asset-library UI's "course" filter is now config-driven — pass `GPC_ASSETS_CONFIG.courses` to retitle for non-golf hosts. See `CHANGELOG.md` for per-release notes.
 
 ## License
 

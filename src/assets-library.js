@@ -13,7 +13,12 @@
 
   const LEGACY_KEY = 'gpc_custom_assets';
   const LEGACY_MIGRATED_KEY = 'gpc_custom_assets_migrated_v2';
-  const COURSES = ['C1', 'C2', 'C3', 'C4', 'C5', 'C6'];
+  // Project-agnostic: host page may set window.GPC_ASSETS_CONFIG.courses (or .groups)
+  // to retitle the "course" filter for non-golf projects (e.g. ['Level 1','Level 2'] or ['scene-a','scene-b']).
+  const _UI_CFG = (window.GPC_ASSETS_CONFIG || {});
+  const COURSES = (Array.isArray(_UI_CFG.courses) && _UI_CFG.courses.length)
+    ? _UI_CFG.courses.slice()
+    : ['C1', 'C2', 'C3', 'C4', 'C5', 'C6'];
   const FALLBACK_VOCAB = ['ui', 'background', 'decoration', 'obstacle', 'character', 'animation', 'ball', 'effect', 'icon'];
 
   // ----- State -----

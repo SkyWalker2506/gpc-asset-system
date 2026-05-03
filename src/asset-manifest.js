@@ -252,5 +252,8 @@
   };
 
   window.GPC_ASSETS = api;
+  // Project-agnostic alias. Prefer `window.AssetSystem` in new projects;
+  // `window.GPC_ASSETS` is preserved for backward compatibility.
+  if (!window.AssetSystem) window.AssetSystem = api;
   init();
 })();
