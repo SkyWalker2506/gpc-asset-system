@@ -405,9 +405,13 @@ function main() {
   }
 
   let exit = 0;
-  if (args.failOn === 'error' && maxLevel >= LEVELS.error) exit = 2;
-  else if (args.failOn === 'warn' && maxLevel >= LEVELS.warn) exit = 1;
-  else if (counts.warn || counts.info) exit = exit || (maxLevel >= LEVELS.error ? 2 : (maxLevel >= LEVELS.warn ? 1 : 0));
+  if (args.failOn === 'error') {
+    exit = maxLevel >= LEVELS.error ? 2 : 0;
+  } else if (args.failOn === 'warn') {
+    exit = maxLevel >= LEVELS.error ? 2 : (maxLevel >= LEVELS.warn ? 1 : 0);
+  } else {
+    exit = 0;
+  }
   process.exit(exit);
 }
 
