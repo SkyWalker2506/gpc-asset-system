@@ -66,6 +66,92 @@ node lib/asset-system/scripts/scan-assets.js
 
 (Currently hard-codes `www/assets/sliced/` as input and `www/assets/manifest.json` as output. PR welcome to make this configurable via env or argv.)
 
+## Validation
+
+`scripts/validate-assets.js` is a read-only health check that flags
+manifest vs. filesystem mismatches. Pure Node, no deps. Safe for CI.
+
+```bash
+node lib/asset-system/scripts/validate-assets.js [--config <path>] [--json] [--fail-on=warn|error]
+```
+
+### Checks
+
+| Validator              | Level     | What it catches |
+|------------------------|-----------|-----------------|
+| `orphan-files`         | warn      | PNGs on disk not in manifest (manifest stale) |
+| `dead-entries`         | error     | Manifest entries pointing to missing files |
+| `duplicate-ids`        | error     | Two entries sharing the same `id` |
+| `duplicate-paths`      | warn      | Two entries pointing to the same path |
+| `missing-tags`         | warn      | Entries with empty `tags` array |
+| `unknown-tags`         | warn      | Tags outside `config.tagVocab` (skipped if no vocab) |
+| `broken-runtime-paths` | error     | `runtimeDir` / `canonicalPath` unresolved on disk |
+| `size-anomaly`         | warn      | PNGs above `sizeThresholdKB` (default 1024) |
+| `dimension-anomaly`    | info      | PNGs whose area is >4x or <0.25x median of siblings in same dir |
+
+### Config
+
+Searched in order: `--config <path>`, `<root>/www/lib/asset-system/validate.config.json`,
+`<root>/validate.config.json`. All keys optional.
+
+```json
+{
+  "manifestPath": "www/assets/manifest.json",
+  "assetRoots": ["www/assets/sliced"],
+  "tagVocab": ["ui","background","decoration","obstacle","character","animation","ball","effect","icon"],
+  "sizeThresholdKB": 1024,
+  "skipFiles": ["**/_archive/**", "**/incoming/**"]
+}
+```
+
+`skipFiles` accepts minimal globs (`**`, `*`, `?`).
+
+### Exit codes
+
+| `--fail-on` (default `error`) | Behavior |
+|-------------------------------|----------|
+| `error`                       | exit 2 if any error issue, else 0 |
+| `warn`                        | exit 1 if any warn-or-higher, else 0 |
+| `never`                       | always exit 0 (still prints) |
+
+### Sample output
+
+```
+validate-assets — root: /path/to/project
+  config:   /path/to/project/validate.config.json
+  manifest: www/assets/manifest.json (272 assets)
+  on-disk:  272 PNG files
+
+- orphan-files [ok]
+- dead-entries [ok]
+- duplicate-ids [ok]
+- duplicate-paths [ok]
+- missing-tags [ok]
+- unknown-tags [ok]
+- broken-runtime-paths [ok]
+- size-anomaly [3 issues]
+    WARN  Oversize PNG (2107KB > 1024KB): www/assets/sliced/batch14/c1-meadow-backdrop.png
+    ...
+- dimension-anomaly [9 issues]
+    INFO  Dimension outlier (602x1130, 4.43x median in ...): ...
+    ...
+
+Totals: 0 error, 3 warn, 9 info
+```
+
+`--json` emits the full structured report (one object per validator) for
+programmatic consumers.
+
+### CI usage
+
+```yaml
+- uses: actions/checkout@v4
+  with: { submodules: true }
+- uses: actions/setup-node@v4
+  with: { node-version: 20 }
+- run: node www/lib/asset-system/scripts/validate-assets.js --fail-on=error
+```
+
 ## Status
 
 Initial extract from golf-paper-craft @ 2026-05-03. The asset-library UI's "course" filter is now config-driven — pass `GPC_ASSETS_CONFIG.courses` to retitle for non-golf hosts. See `CHANGELOG.md` for per-release notes.
