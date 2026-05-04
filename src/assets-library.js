@@ -724,6 +724,16 @@
       try { navigator.clipboard.writeText(txt); flashToast('Copied'); } catch (_) {}
     });
 
+    // Edit in Asset Browser — deep-link to ?edit=<id>
+    const btnEditBrowser = document.getElementById('btn-edit-browser');
+    if (btnEditBrowser) {
+      btnEditBrowser.addEventListener('click', () => {
+        if (!selectedId) return;
+        const url = `https://asset-browser-golf-paper-craft.vercel.app/?edit=${encodeURIComponent(selectedId)}`;
+        window.open(url, '_blank', 'noopener');
+      });
+    }
+
     // Replace / hide / delete / clear crop
     document.getElementById('btn-replace').addEventListener('click', () => document.getElementById('file-replace').click());
     document.getElementById('file-replace').addEventListener('change', async (e) => {
