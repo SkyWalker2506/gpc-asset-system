@@ -23,7 +23,17 @@
 
   // ----- State -----
   let activeTags = new Set();      // AND-mode tag filters
-  let courseFilter = 'all';        // 'all' | 'none' | 'C1'..
+  let courseFilter = 'all';        // 'all' | 'none' | '1'..'6' (normalised from 'C1'..)
+  // Normalise a UI-side course value ('C1'/'c1'/'1') to the storage value
+  // ('1'). Disk + uploads use bare digits to keep `a.course === '1'` lookups
+  // straightforward.
+  function normalizeCourse(v) {
+    if (v == null) return null;
+    const s = String(v).trim();
+    if (!s || s === 'all' || s === 'none') return s;
+    const m = s.match(/^c?([1-6])$/i);
+    return m ? m[1] : s;
+  }
   let searchQuery = '';
   let showHidden = false;
   let selectedId = null;
@@ -200,7 +210,7 @@
     const w = a.srcW || a.width || 0;
     const h = a.srcH || a.height || 0;
     const tags = (a.tags || []).slice(0, 4).map(t => `<span class="ttag">${escape(t)}</span>`).join('');
-    const badge = a.course ? `<span class="badge">${a.course}</span>` : (a.kind === 'animation' || (a.tags||[]).includes('animation') ? `<span class="badge">anim</span>` : '');
+    const badge = a.course ? `<span class="badge">C${a.course}</span>` : (a.kind === 'animation' || (a.tags||[]).includes('animation') ? `<span class="badge">anim</span>` : '');
     return `
       <button class="lib-tile${sel ? ' selected' : ''}${checked ? ' bulk-checked' : ''}${hidden ? ' hidden-asset' : ''}" data-id="${escape(id)}" title="${escape(a.name || id)}">
         <span class="bulk-tick"></span>
@@ -231,7 +241,8 @@
     body.style.display = '';
     document.getElementById('path-display').textContent = `asset:${a.id}`;
     setVal('input[data-field="name"]', a.name || '');
-    setVal('select[data-field="course"]', a.course || '');
+    // HTML option values are 'C1'..'C6' but storage is bare '1'..'6'.
+    setVal('select[data-field="course"]', a.course ? ('C' + a.course) : '');
     setVal('input[data-field="srcW"]', a.srcW || a.width || 0);
     setVal('input[data-field="srcH"]', a.srcH || a.height || 0);
     renderVocabChips();
@@ -464,17 +475,91 @@
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
   // ----- Upload flow -----
-  async function uploadFiles(files) {
-    const a = api();
-    if (!a) { flashToast('Asset API not loaded', true); return; }
+  // Course is REQUIRED on upload. Files are queued behind a modal that asks
+  // for course assignment up-front (suggested from filename prefix). This
+  // keeps the on-disk manifest and uploads consistent — every asset carries
+  // a scope so editor pickers can filter.
+  let pendingUploadFiles = [];
+
+  function suggestCourseFromFilename(name) {
+    const f = (name || '').toLowerCase();
+    let m = f.match(/(?:^|[\/_-])course([1-6])(?:[-_\/.]|$)/);
+    if (m) return m[1];
+    m = f.match(/(?:^|[\/_-])c([1-6])(?:[-_\/.]|$)/);
+    if (m) return m[1];
+    return ''; // unknown
+  }
+  function isLikelyGlobal(name) {
+    const f = (name || '').toLowerCase();
+    return /^ui[-_]/.test(f) || /^ball[-_]/.test(f) || /^icon[-_]/.test(f);
+  }
+
+  function openUploadModal(files) {
     const arr = Array.from(files || []).filter(f => f && /image\//.test(f.type || ''));
     if (!arr.length) return;
+    pendingUploadFiles = arr;
+
+    const modal = document.getElementById('upload-modal');
+    const list = document.getElementById('upload-file-list');
+    const count = document.getElementById('upload-count');
+    const sel = document.getElementById('upload-course');
+    const hint = document.getElementById('upload-suggest-hint');
+    if (!modal || !sel) {
+      // Fallback: legacy direct upload, course unset (preserves old behaviour
+      // if the modal HTML is missing on a host page).
+      uploadCommit('__unset__');
+      return;
+    }
+    count.textContent = String(arr.length);
+
+    // Build per-file rows with suggested course, derive a majority suggestion
+    // for the dropdown default.
+    const counts = {};
+    list.innerHTML = arr.map(f => {
+      const c = suggestCourseFromFilename(f.name);
+      const g = isLikelyGlobal(f.name);
+      const tag = c ? ('C' + c) : (g ? 'GLOBAL' : '?');
+      if (c) counts[c] = (counts[c] || 0) + 1;
+      else if (g) counts['__global__'] = (counts['__global__'] || 0) + 1;
+      return `<div class="ufile"><span class="badge">${tag}</span><span>${escape(f.name)}</span></div>`;
+    }).join('');
+
+    // Pick the highest-frequency suggestion.
+    let best = '__unset__', bestN = 0;
+    for (const k in counts) { if (counts[k] > bestN) { best = k; bestN = counts[k]; } }
+    sel.value = best;
+    hint.textContent = best === '__unset__'
+      ? 'Could not infer a course from filenames — pick one before uploading.'
+      : (best === '__global__'
+        ? 'Filenames look UI/global — set Global, or override per-asset after upload.'
+        : `Suggested C${best} based on filename prefix. Override if wrong.`);
+
+    modal.style.display = 'flex';
+  }
+
+  function closeUploadModal() {
+    const modal = document.getElementById('upload-modal');
+    if (modal) modal.style.display = 'none';
+    pendingUploadFiles = [];
+  }
+
+  async function uploadCommit(courseValue) {
+    const a = api();
+    if (!a) { flashToast('Asset API not loaded', true); return; }
+    const arr = pendingUploadFiles;
+    if (!arr.length) { closeUploadModal(); return; }
+    let course = null;
+    if (courseValue && courseValue !== '__unset__' && courseValue !== '__global__') {
+      course = String(courseValue);
+    }
     let firstId = null;
     for (const f of arr) {
       const baseName = f.name.replace(/\.[a-z0-9]+$/i, '');
       const tags = suggestTagsFromFilename(f.name);
       try {
-        const asset = await a.add(f, { name: baseName, tags });
+        const meta = { name: baseName, tags };
+        if (course) meta.course = course;
+        const asset = await a.add(f, meta);
         if (asset && asset.id && !firstId) firstId = asset.id;
       } catch (e) {
         console.error('[lib] add failed', f.name, e);
@@ -482,9 +567,15 @@
       }
     }
     if (firstId) selectedId = firstId;
+    closeUploadModal();
     renderGrid();
     renderEditPanel();
-    flashToast(`${arr.length} uploaded`);
+    flashToast(`${arr.length} uploaded${course ? ' → C' + course : ' (global)'}`);
+  }
+
+  // Public entry point for the file-input/drop handlers — opens the modal.
+  async function uploadFiles(files) {
+    openUploadModal(files);
   }
 
   // ----- Bulk operations -----
@@ -515,8 +606,9 @@
   function bulkApplyCourse(course) {
     if (!bulkSet.size) return;
     const a = api();
-    bulkSet.forEach(id => a.update(id, { course: course === 'none' ? null : course }));
-    flashToast(`Assigned ${bulkSet.size} to ${course}`);
+    const norm = course === 'none' ? null : normalizeCourse(course);
+    bulkSet.forEach(id => a.update(id, { course: norm }));
+    flashToast(`Assigned ${bulkSet.size} to ${norm ? 'C' + norm : 'global'}`);
   }
   function bulkDelete() {
     if (!bulkSet.size) return;
@@ -541,7 +633,7 @@
 
     // Course filter
     const cf = document.getElementById('course-filter');
-    cf.addEventListener('change', () => { courseFilter = cf.value; renderGrid(); });
+    cf.addEventListener('change', () => { courseFilter = normalizeCourse(cf.value); renderGrid(); });
 
     // Show hidden
     document.getElementById('show-hidden').addEventListener('change', (e) => {
@@ -594,7 +686,7 @@
     });
     document.querySelector('select[data-field="course"]').addEventListener('change', (e) => {
       const a = currentAsset(); if (!a) return;
-      api().update(a.id, { course: e.target.value || null });
+      api().update(a.id, { course: normalizeCourse(e.target.value) || null });
     });
 
     // Path copy
@@ -661,6 +753,25 @@
         ? `./index.html?course=${target.course}&level=${target.level}&editorSync=1`
         : './index.html';
     });
+
+    // Upload modal wiring
+    const uploadConfirm = document.getElementById('upload-confirm');
+    const uploadCancel = document.getElementById('upload-cancel');
+    const uploadCancel2 = document.getElementById('upload-cancel-2');
+    const uploadCourseSel = document.getElementById('upload-course');
+    if (uploadConfirm) {
+      uploadConfirm.addEventListener('click', () => {
+        const v = uploadCourseSel ? uploadCourseSel.value : '__unset__';
+        if (v === '__unset__') {
+          flashToast('Pick a course (or Global) first', true);
+          if (uploadCourseSel) uploadCourseSel.focus();
+          return;
+        }
+        uploadCommit(v);
+      });
+    }
+    if (uploadCancel) uploadCancel.addEventListener('click', closeUploadModal);
+    if (uploadCancel2) uploadCancel2.addEventListener('click', closeUploadModal);
 
     // Resize → re-render preview
     window.addEventListener('resize', renderPreviewCanvas);

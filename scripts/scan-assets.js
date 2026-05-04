@@ -11,7 +11,22 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '..');
+// Resolve project root: env override > walk up looking for www/assets/sliced
+// > fallback to ../ (matches old behaviour for projects laid out as
+// `<root>/www/assets/sliced`). This lets the script run from inside a git
+// submodule (`<root>/www/lib/asset-system/`) without a wrapper.
+function resolveRoot() {
+  if (process.env.GPC_ROOT) return path.resolve(process.env.GPC_ROOT);
+  let cur = path.resolve(__dirname, '..');
+  for (let i = 0; i < 6; i++) {
+    if (fs.existsSync(path.join(cur, 'www', 'assets', 'sliced'))) return cur;
+    const parent = path.dirname(cur);
+    if (parent === cur) break;
+    cur = parent;
+  }
+  return path.resolve(__dirname, '..');
+}
+const ROOT = resolveRoot();
 const SLICED = path.join(ROOT, 'www', 'assets', 'sliced');
 const OUT = path.join(ROOT, 'www', 'assets', 'manifest.json');
 
@@ -39,10 +54,24 @@ function pngSize(file) {
   } catch (_) { return { w: 0, h: 0 }; }
 }
 
-// Detect course tag from path
+// Detect course tag from path. Recognises:
+//   c1-foo.png, foo-c1.png, foo_c1_bar, course1-foo, courseN/, c1-anything/
+//   Returns null for ui-/ball-/global assets.
 function detectCourse(rel) {
-  const m = rel.match(/(?:^|[\/_-])c([1-6])[-_\/]/i);
-  return m ? m[1] : null;
+  const lower = rel.toLowerCase();
+  // Hard-exclude global namespaces.
+  if (/(?:^|\/)balls\//.test(lower)) return null;
+  const base = lower.split('/').pop() || '';
+  if (/^ui[-_]/.test(base)) return null;
+
+  // course<N>-... or course<N>/...
+  let m = lower.match(/(?:^|[\/_-])course([1-6])(?:[-_\/.]|$)/);
+  if (m) return m[1];
+  // c<N> as a token boundary anywhere in the path/name (start, after /, _ or -;
+  // followed by /, -, _, . or end).
+  m = lower.match(/(?:^|[\/_-])c([1-6])(?:[-_\/.]|$)/);
+  if (m) return m[1];
+  return null;
 }
 
 // Detect frame count from filename: e.g. -8f, _8f, -anim-8, -strip-8
