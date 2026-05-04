@@ -206,9 +206,9 @@
     const sel = id === selectedId;
     const checked = bulkSet.has(id);
     const hidden = !!a.hidden;
-    const src = a.url || a.dataUrl || '';
-    const w = a.srcW || a.width || 0;
-    const h = a.srcH || a.height || 0;
+    const src = assetSrc(a);
+    const w = a.srcW || a.w || a.width || 0;
+    const h = a.srcH || a.h || a.height || 0;
     const tags = (a.tags || []).slice(0, 4).map(t => `<span class="ttag">${escape(t)}</span>`).join('');
     const badge = a.course ? `<span class="badge">C${a.course}</span>` : (a.kind === 'animation' || (a.tags||[]).includes('animation') ? `<span class="badge">anim</span>` : '');
     return `
@@ -225,6 +225,24 @@
         </div>
       </button>`;
   }
+  // Resolve a usable <img src> for an asset. On-disk assets store a relative
+  // `path` like "assets/sliced/balls/ball-01.png" — prefix with "./" so it
+  // resolves against the host page regardless of mount path. Uploads store a
+  // data URL in `path` (or legacy `dataUrl`).
+  function assetSrc(a) {
+    if (!a) return '';
+    const raw = a.url || a.dataUrl || a.path || '';
+    if (!raw) return '';
+    if (/^(data:|blob:|https?:|\.\/|\.\.\/|\/)/i.test(raw)) return raw;
+    return './' + raw.replace(/^\/+/, '');
+  }
+  function isUploadAsset(a) {
+    if (!a) return false;
+    if (a.source === 'uploaded' || a.source === 'upload' || a.uploaded) return true;
+    const raw = a.dataUrl || a.path || '';
+    return /^data:/i.test(raw);
+  }
+
   function escape(s) {
     return String(s == null ? '' : s)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
