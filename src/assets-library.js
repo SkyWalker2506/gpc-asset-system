@@ -185,8 +185,18 @@
     }
     empty.style.display = 'none';
     grid.innerHTML = list.map(a => tileHtml(a)).join('');
-    grid.querySelectorAll('[data-id]').forEach(btn => {
+    grid.querySelectorAll('[data-update-id]').forEach(el => {
+      el.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        const aid = el.dataset.updateId || '';
+        const url = 'https://asset-browser-golf-paper-craft.vercel.app/?edit=' + encodeURIComponent(aid);
+        window.open(url, '_blank', 'noopener');
+      });
+    });
+    grid.querySelectorAll('.lib-tile[data-id]').forEach(btn => {
       btn.addEventListener('click', (ev) => {
+        if (ev.target && ev.target.closest && ev.target.closest('[data-update-id]')) return;
         const id = btn.dataset.id;
         if (bulkMode) {
           if (bulkSet.has(id)) bulkSet.delete(id); else bulkSet.add(id);
@@ -214,6 +224,7 @@
     return `
       <button class="lib-tile${sel ? ' selected' : ''}${checked ? ' bulk-checked' : ''}${hidden ? ' hidden-asset' : ''}" data-id="${escape(id)}" title="${escape(a.name || id)}">
         <span class="bulk-tick"></span>
+        <span class="lib-update-btn" data-update-id="${escape(id)}" title="Edit in Asset Browser">✏ Update</span>
         <div class="thumb-wrap">
           ${badge}
           <img loading="lazy" src="${escape(src)}" alt="${escape(a.name || id)}"/>
