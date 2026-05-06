@@ -234,6 +234,38 @@
     return readyPromise;
   }
 
+  // ----- manifest.overrides.json parent map -----
+  // Returns a Promise<{[assetId]: parentId}> built from manifest.overrides.json.
+  // Cached after first fetch. The URL is relative to the manifest URL's directory.
+  var _manifestParentsCache = null;
+  var _manifestParentsPromise = null;
+  // manifest.overrides.json lives at the same level as the HTML pages (www/ root).
+  // Host may override via GPC_ASSETS_CONFIG.manifestOverridesUrl.
+  var MANIFEST_OVERRIDES_URL = (CONFIG.manifestOverridesUrl) || 'manifest.overrides.json';
+
+  function getManifestParents() {
+    if (_manifestParentsCache) return Promise.resolve(_manifestParentsCache);
+    if (_manifestParentsPromise) return _manifestParentsPromise;
+    _manifestParentsPromise = new Promise(function (resolve) {
+      if (typeof fetch !== 'function') { _manifestParentsCache = {}; resolve({}); return; }
+      fetch(MANIFEST_OVERRIDES_URL + '?v=' + Date.now(), { cache: 'no-cache' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          var map = {};
+          if (data && data.overrides && typeof data.overrides === 'object') {
+            Object.keys(data.overrides).forEach(function (id) {
+              var entry = data.overrides[id];
+              if (entry && entry.parent) map[id] = entry.parent;
+            });
+          }
+          _manifestParentsCache = map;
+          resolve(map);
+        })
+        .catch(function () { _manifestParentsCache = {}; resolve({}); });
+    });
+    return _manifestParentsPromise;
+  }
+
   var api = {
     list: list,
     get: get,
@@ -242,6 +274,7 @@
     add: add,
     on: on,
     TAG_VOCAB: TAG_VOCAB,
+    getManifestParents: getManifestParents,
     ready: function () { return readyPromise || init(); },
     isReady: function () { return ready; },
     _internal: {
