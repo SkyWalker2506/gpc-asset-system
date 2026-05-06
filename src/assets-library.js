@@ -272,8 +272,12 @@
     setVal('input[data-field="name"]', a.name || '');
     // HTML option values are 'C1'..'C6' but storage is bare '1'..'6'.
     setVal('select[data-field="course"]', a.course ? ('C' + a.course) : '');
-    setVal('input[data-field="srcW"]', a.srcW || a.width || 0);
-    setVal('input[data-field="srcH"]', a.srcH || a.height || 0);
+    // Parse "WxH" from dim if explicit srcW/srcH are missing.
+    const _dimM = (a.dim || '').match(/^(\d+)[x×](\d+)$/i);
+    const _dimW = _dimM ? +_dimM[1] : 0;
+    const _dimH = _dimM ? +_dimM[2] : 0;
+    setVal('input[data-field="srcW"]', a.srcW || a.width || _dimW || 0);
+    setVal('input[data-field="srcH"]', a.srcH || a.height || _dimH || 0);
     renderVocabChips();
     renderTagEditor();
     renderPreviewCanvas();
