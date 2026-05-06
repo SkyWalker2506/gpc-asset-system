@@ -1,0 +1,1082 @@
+{
+  "assets/sliced/balls/ball-01.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-02.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-03.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-04.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-05.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-06.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-07.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-08.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-09.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-10.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-11.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-12.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-13.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-14.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-15.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-16.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-17.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-18.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-19.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/balls/ball-20.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch11/c1-flag-wave-8f.png": [],
+  "assets/sliced/batch11/c2-flag-wave-8f.png": [],
+  "assets/sliced/batch11/c3-flag-wave-8f.png": [],
+  "assets/sliced/batch11/c4-flag-wave-8f.png": [],
+  "assets/sliced/batch11/c5-flag-wave-8f.png": [],
+  "assets/sliced/batch13/c1-rock-flat.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 48,
+      "h": 48,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch13/c1-rock-spire.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 48,
+      "h": 48,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch14/c1-ground/c1-ground-tile-01.png": [],
+  "assets/sliced/batch14/c1-ground/c1-ground-tile-02.png": [],
+  "assets/sliced/batch14/c1-ground/c1-ground-tile-03.png": [],
+  "assets/sliced/batch14/c1-ground/c1-ground-tile-04.png": [],
+  "assets/sliced/batch14/c1-ground/c1-ground-tile-05.png": [],
+  "assets/sliced/batch14/c1-ground/c1-ground-tile-06.png": [],
+  "assets/sliced/batch14/c1-hole-clean.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch14/c1-meadow-backdrop.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-01.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-02.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-03.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-04.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-05.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-06.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-07.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-08.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-09.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-10.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-11.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/orange-12.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-01.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-02.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-03.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-04.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-05.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-06.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-07.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-08.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-09.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-10.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-11.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/purple-12.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-01.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-02.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-03.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-04.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-05.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-06.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-07.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-08.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-09.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-10.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-11.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/teal-12.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-01.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-02.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-03.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-04.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-05.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-06.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-07.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-08.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-09.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-10.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-11.png": [],
+  "assets/sliced/batch15/c1-ambient/butterflies/yellow-12.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-01.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-02.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-03.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-04.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-05.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-06.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-07.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-08.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-09.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-10.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-11.png": [],
+  "assets/sliced/batch15/c1-ambient/clouds/cloud-12.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-01.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-02.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-03.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-04.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-05.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-06.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-07.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-08.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-09.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-10.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-11.png": [],
+  "assets/sliced/batch15/c1-ambient/sun/sun-12.png": [],
+  "assets/sliced/batch15/c1-grass/c1-grass-01.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-02.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-03.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-04.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-05.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-06.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-07.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-08.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-09.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-10.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-11.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-12.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-13.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-14.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-15.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-16.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-17.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch15/c1-grass/c1-grass-18.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch16/atlas-1-menu/course-tile-c1.png": [],
+  "assets/sliced/batch16/atlas-1-menu/course-tile-c2.png": [],
+  "assets/sliced/batch16/atlas-1-menu/course-tile-c3.png": [],
+  "assets/sliced/batch16/atlas-1-menu/course-tile-c4.png": [],
+  "assets/sliced/batch16/atlas-1-menu/course-tile-c5.png": [],
+  "assets/sliced/batch16/atlas-1-menu/level-node-completed.png": [],
+  "assets/sliced/batch16/atlas-1-menu/level-node-locked.png": [],
+  "assets/sliced/batch16/atlas-1-menu/level-node-unlocked.png": [],
+  "assets/sliced/batch16/atlas-1-menu/rope-segment.png": [],
+  "assets/sliced/batch16/atlas-2-endgame/complete-card.png": [],
+  "assets/sliced/batch16/atlas-2-endgame/failed-card.png": [],
+  "assets/sliced/batch16/atlas-2-endgame/hole-rim-c1.png": [],
+  "assets/sliced/batch16/atlas-2-endgame/hole-rim-c2.png": [],
+  "assets/sliced/batch16/atlas-2-endgame/hole-rim-c3.png": [],
+  "assets/sliced/batch16/atlas-2-endgame/hole-rim-c4.png": [],
+  "assets/sliced/batch16/atlas-2-endgame/hole-rim-c5.png": [],
+  "assets/sliced/batch16/atlas-2-endgame/tape-blue.png": [],
+  "assets/sliced/batch16/atlas-2-endgame/tape-red.png": [],
+  "assets/sliced/batch16/atlas-3-bg-identity/bg-c4-neon-ground-band.png": [],
+  "assets/sliced/batch16/atlas-3-bg-identity/bg-ornament-candy-banner.png": [],
+  "assets/sliced/batch16/atlas-3-bg-identity/bg-ornament-lollipop.png": [],
+  "assets/sliced/batch16/atlas-3-bg-identity/bg-ornament-sprinkle-cloud.png": [],
+  "assets/sliced/batch16/atlas-3-bg-identity/c2-wind-river-still.png": [],
+  "assets/sliced/batch16/atlas-3-bg-identity/c4-portal-neon.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-4-1-regen/c5-hill-v2.png": [],
+  "assets/sliced/batch16/atlas-4-1-regen/ground-halo-cyan-pink.png": [],
+  "assets/sliced/batch16/atlas-4-1-regen/ground-halo-pink.png": [],
+  "assets/sliced/batch16/atlas-4-1-regen/ground-halo-purple.png": [],
+  "assets/sliced/batch16/atlas-4-1-regen/mood-arc-pink.png": [],
+  "assets/sliced/batch16/atlas-4-1-regen/mood-arc-purple.png": [],
+  "assets/sliced/batch16/atlas-4-hills-halos/c3-ground-halo.png": [],
+  "assets/sliced/batch16/atlas-4-hills-halos/c3-hill.png": [],
+  "assets/sliced/batch16/atlas-4-hills-halos/c4-ground-halo.png": [],
+  "assets/sliced/batch16/atlas-4-hills-halos/c4-hill.png": [],
+  "assets/sliced/batch16/atlas-4-hills-halos/c5-ground-halo.png": [],
+  "assets/sliced/batch16/atlas-4-hills-halos/c5-hill.png": [],
+  "assets/sliced/batch16/atlas-5-cosmetics/accessory-cowboy.png": [],
+  "assets/sliced/batch16/atlas-5-cosmetics/accessory-detective.png": [],
+  "assets/sliced/batch16/atlas-5-cosmetics/accessory-ninja.png": [],
+  "assets/sliced/batch16/atlas-5-cosmetics/accessory-princess.png": [],
+  "assets/sliced/batch16/atlas-5-cosmetics/accessory-smiley-hat.png": [],
+  "assets/sliced/batch16/atlas-5-cosmetics/accessory-wizard.png": [],
+  "assets/sliced/batch16/atlas-5-cosmetics/face-overlay-eyes.png": [],
+  "assets/sliced/batch16/atlas-5-cosmetics/face-overlay-smiley.png": [],
+  "assets/sliced/batch16/atlas-holes-v1/c1-hole-grass-v2.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-holes-v1/c2-hole-cloud.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-holes-v1/c3-hole-crystal.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-holes-v1/c4-hole-neon.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-holes-v1/c5-hole-candy.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-holes-v1/mood-star-arc.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-holes-v2/c1-hole-grass-v3.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-holes-v2/c2-hole-cloud-v2.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-holes-v2/c3-hole-crystal-v2.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-holes-v2/c4-hole-neon-v2.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-holes-v2/c5-hole-candy-v2.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch16/atlas-holes-v2/mood-crown-anchor.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 20,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch3/c2-portal-ring-blue.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch3/c3-glow-shard-v3.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 18,
+      "type": "trigger",
+      "action": "pickup"
+    }
+  ],
+  "assets/sliced/batch3/c3-stalactite-v2.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 48,
+      "h": 48,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch3/c5-candy-cane.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 16,
+      "h": 48,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch3/c5-gummy-green.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 18,
+      "type": "trigger",
+      "action": "pickup"
+    }
+  ],
+  "assets/sliced/batch3/c5-gummy-red.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 18,
+      "type": "trigger",
+      "action": "pickup"
+    }
+  ],
+  "assets/sliced/batch3/ui-tutorial-arrow.png": [],
+  "assets/sliced/batch7/c1-bridge.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 40,
+      "h": 56,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/c1-crocodile.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 64,
+      "h": 32,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/c1-fence.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 40,
+      "h": 56,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/c1-ledge.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 40,
+      "h": 56,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/c1-mud.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 80,
+      "h": 32,
+      "type": "trigger",
+      "action": "zone-water"
+    }
+  ],
+  "assets/sliced/batch7/c1-pit.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 24,
+      "type": "trigger",
+      "action": "hole"
+    }
+  ],
+  "assets/sliced/batch7/c1-ramp.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 40,
+      "h": 56,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/c1-rock.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 48,
+      "h": 48,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/c1-spring.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 40,
+      "h": 56,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/c1-trampoline.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 40,
+      "h": 56,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/c1-tree-cherry.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 40,
+      "h": 56,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/c1-tree-pine.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 40,
+      "h": 56,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/c2-magnet.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 32,
+      "type": "trigger",
+      "action": "magnet"
+    }
+  ],
+  "assets/sliced/batch7/c4-boost-pad.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 64,
+      "h": 16,
+      "type": "trigger",
+      "action": "boost-up"
+    }
+  ],
+  "assets/sliced/batch7/c4-gravity-flip-zone.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 64,
+      "h": 16,
+      "type": "trigger",
+      "action": "boost-up"
+    }
+  ],
+  "assets/sliced/batch7/c4-ice-pool.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 80,
+      "h": 32,
+      "type": "trigger",
+      "action": "zone-water"
+    }
+  ],
+  "assets/sliced/batch7/c4-ice-zone.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 80,
+      "h": 32,
+      "type": "trigger",
+      "action": "zone-water"
+    }
+  ],
+  "assets/sliced/batch7/c4-laser-gate.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 8,
+      "h": 64,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/c5-candy-bouncer.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 40,
+      "h": 56,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch7/ui-button-paper.png": [],
+  "assets/sliced/batch7/ui-club.png": [],
+  "assets/sliced/batch7/ui-hud-card.png": [],
+  "assets/sliced/batch7/ui-offscreen-arrow.png": [],
+  "assets/sliced/batch7/ui-sound-off.png": [],
+  "assets/sliced/batch7/ui-sound-on.png": [],
+  "assets/sliced/batch7/ui-star.png": [],
+  "assets/sliced/batch7/ui-tip-card.png": [],
+  "assets/sliced/batch8/c1-tree-leafy.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 40,
+      "h": 56,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/batch8/c1-water-zone.png": [],
+  "assets/sliced/batch8/c3-bg-crystals.png": [],
+  "assets/sliced/batch8/c3-bg-mushrooms.png": [],
+  "assets/sliced/batch8/c4-bg-circuit.png": [],
+  "assets/sliced/batch8/c4-bg-server.png": [],
+  "assets/sliced/batch8/ui-aim-dots-short.png": [],
+  "assets/sliced/batch8/ui-back-icon.png": [],
+  "assets/sliced/batch8/ui-chip-coin-plate.png": [],
+  "assets/sliced/batch8/ui-chip-gem-plate.png": [],
+  "assets/sliced/batch8/ui-coin-icon.png": [],
+  "assets/sliced/batch8/ui-gem-icon.png": [],
+  "assets/sliced/batch8/ui-menu-icon.png": [],
+  "assets/sliced/batch8/ui-play-icon.png": [],
+  "assets/sliced/batch8/ui-restart-icon.png": [],
+  "assets/sliced/batch8/ui-shop-icon.png": [],
+  "assets/sliced/batch8/ui-sound-off.png": [],
+  "assets/sliced/batch8/ui-sound-on.png": [],
+  "assets/sliced/batch8/ui-star.png": [],
+  "assets/sliced/batch8/ui-unstuck-icon.png": [],
+  "assets/sliced/batch8/ui-upgrades-icon.png": [],
+  "assets/sliced/batch9/c1-flowers-mixed.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch9/c1-flowers-purple.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch9/c1-flowers-red.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch9/c1-flowers-yellow.png": [
+    {
+      "shape": "circle",
+      "ox": 0,
+      "oy": 0,
+      "r": 16,
+      "type": "trigger",
+      "action": "animate-on-proximity"
+    }
+  ],
+  "assets/sliced/batch9/c1-hill-double.png": [],
+  "assets/sliced/batch9/c1-hill-small.png": [],
+  "assets/sliced/batch9/c1-hill-tall.png": [],
+  "assets/sliced/batch9/c1-hill-wide.png": [],
+  "assets/sliced/c3-cave/c3-crystal-cluster-v2.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 48,
+      "h": 48,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/c3-cave/c3-crystal-cluster.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 48,
+      "h": 48,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/c3-cave/c3-ground-tile-01.png": [],
+  "assets/sliced/c3-cave/c3-ground-tile-02.png": [],
+  "assets/sliced/c3-cave/c3-ground-tile-03.png": [],
+  "assets/sliced/c3-cave/c3-ground-tile-04.png": [],
+  "assets/sliced/c3-cave/c3-ground-tile-05.png": [],
+  "assets/sliced/c3-cave/c3-ground-tile-06.png": [],
+  "assets/sliced/c3-cave/c3-stalactite.png": [
+    {
+      "shape": "rect",
+      "ox": 0,
+      "oy": 0,
+      "w": 48,
+      "h": 48,
+      "type": "solid",
+      "action": "none"
+    }
+  ],
+  "assets/sliced/c4-neon/c4-ground-tile-01.png": [],
+  "assets/sliced/c4-neon/c4-ground-tile-02.png": [],
+  "assets/sliced/c4-neon/c4-ground-tile-03.png": [],
+  "assets/sliced/c4-neon/c4-ground-tile-04.png": [],
+  "assets/sliced/c4-neon/c4-ground-tile-05.png": [],
+  "assets/sliced/c4-neon/c4-ground-tile-06.png": [],
+  "assets/sliced/c5-candy/c5-backdrop-01.png": [],
+  "assets/sliced/c5-candy/c5-backdrop-02.png": [],
+  "assets/sliced/c5-candy/c5-backdrop-03.png": [],
+  "assets/sliced/c5-candy/c5-backdrop-04.png": [],
+  "assets/sliced/c5-candy/c5-backdrop-05.png": [],
+  "assets/sliced/c5-candy/c5-backdrop-06.png": [],
+  "assets/sliced/c5-candy/c5-backdrop-07.png": [],
+  "assets/sliced/c5-candy/c5-ground-tile-01.png": [],
+  "assets/sliced/c5-candy/c5-ground-tile-02.png": [],
+  "assets/sliced/c5-candy/c5-ground-tile-03.png": [],
+  "assets/sliced/c5-candy/c5-ground-tile-04.png": [],
+  "assets/sliced/c5-candy/c5-ground-tile-05.png": [],
+  "assets/sliced/c5-candy/c5-ground-tile-06.png": []
+}
