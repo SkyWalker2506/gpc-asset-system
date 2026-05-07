@@ -32,6 +32,16 @@
       return (obj && typeof obj === 'object') ? obj : {};
     } catch (_) { return {}; }
   }
+  // Find override entry by exact key or path/name suffix match.
+  function getOverrideEntry(overrides, name) {
+    if (!name) return null;
+    if (overrides[name]) return overrides[name];
+    for (const k of Object.keys(overrides)) {
+      if (k === name || k.endsWith('/' + name) || k.endsWith(name)) return overrides[k];
+    }
+    return null;
+  }
+
   // Returns badge HTML strings for whichever GameAsset override props are set.
   function gameAssetBadges(assetName) {
     const overrides = readAssetOverridesLib();
@@ -54,6 +64,7 @@
   }
 
   // ----- State -----
+  let showColliders = localStorage.getItem('gpc_lib_show_colliders') !== 'false';
   let activeTags = new Set();      // AND-mode tag filters
   let courseFilter = 'all';        // 'all' | 'none' | '1'..'6' (normalised from 'C1'..)
   // Normalise a UI-side course value ('C1'/'c1'/'1') to the storage value
@@ -217,6 +228,7 @@
     }
     empty.style.display = 'none';
     grid.innerHTML = list.map(a => tileHtml(a)).join('');
+    requestAnimationFrame(drawTileColliderOverlays);
     grid.querySelectorAll('[data-update-id]').forEach(el => {
       el.addEventListener('click', (ev) => {
         ev.stopPropagation();
@@ -243,6 +255,95 @@
       });
     });
   }
+  // ----- Collider overlay rendering -----
+  function drawTileColliderOverlays() {
+    if (!showColliders) return;
+    const overrides = readAssetOverridesLib();
+    const defaults = window.GPC_DEFAULT_COLLIDERS || {};
+    document.querySelectorAll('.tile-preview-overlay').forEach(canvas => {
+      const id = canvas.dataset.assetId;
+      if (!api()) return;
+      const asset = api().get(id);
+      if (!asset) return;
+      const name = asset.name || id;
+      const entry = getOverrideEntry(overrides, name);
+      const colliders = (entry && entry.colliders && entry.colliders.length)
+        ? entry.colliders
+        : (defaults[asset.path || ''] || defaults[name] || null);
+      if (!colliders || !colliders.length) return;
+      const pivot = (entry && entry.pivot) || { x: 0.5, y: 0.5 };
+
+      const wrap = canvas.parentElement;
+      const size = wrap ? (wrap.offsetWidth || 80) : 80;
+      canvas.width = size;
+      canvas.height = size;
+
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, size, size);
+
+      const spriteW = asset.srcW || asset.w || asset.width || 64;
+      const spriteH = asset.srcH || asset.h || asset.height || 64;
+
+      const pad = 6;
+      const drawW = size - pad * 2;
+      const drawH = size - pad * 2;
+      const scale = Math.min(drawW / spriteW, drawH / spriteH);
+      const offX = pad + (drawW - spriteW * scale) / 2;
+      const offY = pad + (drawH - spriteH * scale) / 2;
+
+      colliders.forEach(col => {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255,60,60,0.9)';
+        ctx.fillStyle = 'rgba(255,60,60,0.18)';
+        ctx.lineWidth = 1.5;
+        if (col.shape === 'rect') {
+          const rx = offX + col.x * spriteW * scale;
+          const ry = offY + col.y * spriteH * scale;
+          const rw = col.w * spriteW * scale;
+          const rh = col.h * spriteH * scale;
+          ctx.fillRect(rx, ry, rw, rh);
+          ctx.strokeRect(rx, ry, rw, rh);
+        } else if (col.shape === 'circle') {
+          const cx = offX + (pivot.x * spriteW + (col.ox || 0)) * scale;
+          const cy = offY + (pivot.y * spriteH + (col.oy || 0)) * scale;
+          const cr = (col.r || 24) * scale;
+          ctx.beginPath(); ctx.arc(cx, cy, cr, 0, Math.PI * 2);
+          ctx.fill(); ctx.stroke();
+        } else if (col.shape === 'ellipse') {
+          const cx = offX + (pivot.x * spriteW + (col.ox || 0)) * scale;
+          const cy = offY + (pivot.y * spriteH + (col.oy || 0)) * scale;
+          const rx2 = (col.rx || col.r || 20) * scale;
+          const ry2 = (col.ry || col.r || 20) * scale;
+          ctx.beginPath(); ctx.ellipse(cx, cy, rx2, ry2, 0, 0, Math.PI * 2);
+          ctx.fill(); ctx.stroke();
+        }
+        ctx.restore();
+      });
+
+      // Pivot dot
+      const px = offX + pivot.x * spriteW * scale;
+      const py = offY + pivot.y * spriteH * scale;
+      ctx.save();
+      ctx.fillStyle = 'rgba(0,230,255,0.9)';
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(px, py, 3, 0, Math.PI * 2);
+      ctx.fill(); ctx.stroke();
+      ctx.restore();
+    });
+  }
+
+  // Check if an asset has any collider data (override or default)
+  function assetHasCollider(a) {
+    const overrides = readAssetOverridesLib();
+    const name = a.name || a.id;
+    const entry = getOverrideEntry(overrides, name);
+    if (entry && entry.colliders && entry.colliders.length) return true;
+    const defaults = window.GPC_DEFAULT_COLLIDERS || {};
+    const dc = defaults[a.path || ''] || defaults[name];
+    return !!(dc && dc.length);
+  }
+
   function tileHtml(a) {
     const id = a.id;
     const sel = id === selectedId;
@@ -261,6 +362,7 @@
         <div class="thumb-wrap">
           ${badge}
           <img loading="lazy" src="${escape(src)}" alt="${escape(a.name || id)}"/>
+          ${showColliders && assetHasCollider(a) ? `<canvas class="tile-preview-overlay" data-asset-id="${escape(id)}"></canvas>` : ''}
         </div>
         <div class="meta">
           <div class="nm">${escape(a.name || id)}</div>
@@ -726,6 +828,18 @@
       e.preventDefault(); dragDepth = 0; overlay.classList.remove('on');
       if (e.dataTransfer && e.dataTransfer.files) uploadFiles(e.dataTransfer.files);
     });
+
+    // Collider overlay toggle
+    const btnColliders = document.getElementById('btn-show-colliders');
+    if (btnColliders) {
+      btnColliders.classList.toggle('active', showColliders);
+      btnColliders.addEventListener('click', () => {
+        showColliders = !showColliders;
+        localStorage.setItem('gpc_lib_show_colliders', String(showColliders));
+        btnColliders.classList.toggle('active', showColliders);
+        renderGrid();
+      });
+    }
 
     // Bulk toggle
     document.getElementById('btn-bulk').addEventListener('click', () => setBulkMode(!bulkMode));
