@@ -24,7 +24,7 @@
   var LS_OVERRIDES = CONFIG.storageKeys && CONFIG.storageKeys.overrides || 'gpc_asset_overrides';
 
   var TAG_VOCAB = (CONFIG.tagVocab && CONFIG.tagVocab.length) ? CONFIG.tagVocab.slice() : [
-    'ui', 'background', 'decoration', 'obstacle',
+    'ui', 'background', 'ground', 'decoration', 'obstacle',
     'character', 'animation', 'ball', 'effect', 'icon',
   ];
 
