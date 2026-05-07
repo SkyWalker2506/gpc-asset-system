@@ -21,6 +21,38 @@
     : ['C1', 'C2', 'C3', 'C4', 'C5', 'C6'];
   const FALLBACK_VOCAB = ['ui', 'background', 'decoration', 'obstacle', 'character', 'animation', 'ball', 'effect', 'icon'];
 
+  // ----- GameAsset override helpers -----
+  // GameAsset = { sprite (required), pivot?, collider?, anchor?, groundYOffset? }
+  // Stored as gpc_asset_overrides[assetName] in localStorage.
+  function readAssetOverridesLib() {
+    try {
+      const raw = localStorage.getItem('gpc_asset_overrides');
+      if (!raw) return {};
+      const obj = JSON.parse(raw);
+      return (obj && typeof obj === 'object') ? obj : {};
+    } catch (_) { return {}; }
+  }
+  // Returns badge HTML strings for whichever GameAsset override props are set.
+  function gameAssetBadges(assetName) {
+    const overrides = readAssetOverridesLib();
+    // Match by exact key or by key ending with assetName (for path-based keys)
+    let entry = overrides[assetName];
+    if (!entry) {
+      for (const k in overrides) {
+        if (k.endsWith(assetName) || k.endsWith('/' + assetName)) {
+          entry = overrides[k]; break;
+        }
+      }
+    }
+    if (!entry || typeof entry !== 'object') return '';
+    const parts = [];
+    if (entry.collider) parts.push('<span class="ga-badge ga-collider" title="Custom collider">collider</span>');
+    if (entry.pivot) parts.push('<span class="ga-badge ga-pivot" title="Custom pivot">pivot</span>');
+    if (entry.anchor) parts.push('<span class="ga-badge ga-anchor" title="Custom anchor">anchor</span>');
+    if (entry.groundYOffset != null) parts.push('<span class="ga-badge ga-ground" title="Ground offset: ' + entry.groundYOffset + '">groundOff</span>');
+    return parts.join('');
+  }
+
   // ----- State -----
   let activeTags = new Set();      // AND-mode tag filters
   let courseFilter = 'all';        // 'all' | 'none' | '1'..'6' (normalised from 'C1'..)
@@ -221,10 +253,11 @@
     const h = a.srcH || a.h || a.height || 0;
     const tags = (a.tags || []).slice(0, 4).map(t => `<span class="ttag">${escape(t)}</span>`).join('');
     const badge = a.course ? `<span class="badge">C${a.course}</span>` : (a.kind === 'animation' || (a.tags||[]).includes('animation') ? `<span class="badge">anim</span>` : '');
+    const gaBadges = gameAssetBadges(a.name || id);
     return `
       <button class="lib-tile${sel ? ' selected' : ''}${checked ? ' bulk-checked' : ''}${hidden ? ' hidden-asset' : ''}" data-id="${escape(id)}" title="${escape(a.name || id)}">
         <span class="bulk-tick"></span>
-        <span class="lib-update-btn" data-update-id="${escape(id)}" title="Edit in Asset Browser">✏ Update</span>
+        <span class="lib-update-btn" data-update-id="${escape(id)}" title="Edit in Asset Browser">&#9998; Update</span>
         <div class="thumb-wrap">
           ${badge}
           <img loading="lazy" src="${escape(src)}" alt="${escape(a.name || id)}"/>
@@ -233,6 +266,7 @@
           <div class="nm">${escape(a.name || id)}</div>
           <div class="dim">${w}×${h}${hidden ? ' · hidden' : ''}</div>
           <div class="tile-tags">${tags}</div>
+          ${gaBadges ? `<div class="ga-badges">${gaBadges}</div>` : ''}
         </div>
       </button>`;
   }
