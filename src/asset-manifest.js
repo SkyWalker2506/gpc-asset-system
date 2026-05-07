@@ -10,6 +10,13 @@
  * Asset schema:
  *   { id, path, name, tags:[], course?:'1'..'6', w, h,
  *     type:'sprite'|'animation', frameCount?, source:'on-disk'|'uploaded', hidden?:bool }
+ *
+ * Override schema (stored in gpc_asset_overrides per-id):
+ *   { pivot?: { x: 0..1, y: 0..1 }  // normalised, top-left origin. Default (0.5, 1.0) = bottom-centre.
+ *     colliders?: ColliderShape[]
+ *     groundYOffset?: number }
+ *
+ * @typedef {{ x: number, y: number }} PivotPoint  // x: 0=left, 1=right; y: 0=top, 1=bottom
  */
 (function () {
   'use strict';
