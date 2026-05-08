@@ -234,7 +234,29 @@
       fetch(url, { cache: 'no-cache' })
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (data) {
-          if (data && Array.isArray(data.assets)) diskAssets = data.assets;
+          if (data && Array.isArray(data.assets)) {
+            diskAssets = data.assets;
+            // If manifest carries a CDN base, update GPC_ASSET_CDN and rewrite paths.
+            if (data.cdnBase) {
+              if (window.GPC_ASSET_CDN) {
+                window.GPC_ASSET_CDN.base = data.cdnBase;
+              }
+              diskAssets = diskAssets.map(function (a) {
+                // If cdnUrl already baked in by migration script, use it directly.
+                if (a.cdnUrl) {
+                  return Object.assign({}, a, { originalPath: a.path, path: a.cdnUrl });
+                }
+                // Otherwise resolve via GPC_ASSET_CDN if available.
+                if (window.GPC_ASSET_CDN && a.path && a.path.indexOf('http') !== 0) {
+                  return Object.assign({}, a, {
+                    originalPath: a.path,
+                    path: window.GPC_ASSET_CDN.resolve(a.path),
+                  });
+                }
+                return a;
+              });
+            }
+          }
           done();
         })
         .catch(function () { done(); });
