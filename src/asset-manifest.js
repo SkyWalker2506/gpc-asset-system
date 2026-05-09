@@ -234,6 +234,18 @@
     return readyPromise;
   }
 
+  // getAssetOverride(id, manifestParents?): returns the effective override for
+  // an asset, walking the parent chain for any props not set on the asset itself.
+  // Uses VariantSystem.getAssetOverride when available; falls back to own override only.
+  function getAssetOverride(id, manifestParents) {
+    if (window.VariantSystem && typeof window.VariantSystem.getAssetOverride === 'function') {
+      return window.VariantSystem.getAssetOverride(id, manifestParents || {});
+    }
+    // Minimal fallback: own override only
+    var ovr = overrides[id];
+    return ovr ? Object.assign({}, ovr) : {};
+  }
+
   var api = {
     list: list,
     get: get,
@@ -241,6 +253,7 @@
     remove: remove,
     add: add,
     on: on,
+    getAssetOverride: getAssetOverride,
     TAG_VOCAB: TAG_VOCAB,
     ready: function () { return readyPromise || init(); },
     isReady: function () { return ready; },
