@@ -208,6 +208,7 @@
         cropDrag = null;
         renderGrid();
         renderEditPanel();
+        openEditModal(id);
       });
     });
   }
@@ -652,6 +653,129 @@
     });
     bulkSet.clear();
     setBulkMode(false);
+  }
+
+  // ----- Inline edit modal (image-editor) -----
+  let _editModalInstance = null;
+
+  function openEditModal(assetId) {
+    const a = api();
+    const asset = a && typeof a.get === 'function' ? a.get(assetId) : null;
+    if (!asset) { flashToast('Asset not found', true); return; }
+
+    // Reuse or create overlay container
+    let overlay = document.getElementById('lib-edit-modal-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'lib-edit-modal-overlay';
+      overlay.style.cssText = [
+        'position:fixed;inset:0;z-index:9000',
+        'background:rgba(20,16,30,0.88)',
+        'display:flex;align-items:center;justify-content:center',
+        'padding:20px'
+      ].join(';');
+      document.body.appendChild(overlay);
+    }
+
+    // Inner card
+    overlay.innerHTML = '';
+    const card = document.createElement('div');
+    card.style.cssText = [
+      'background:#1d1830;border:1px solid rgba(255,255,255,0.18)',
+      'border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,0.65)',
+      'width:100%;max-width:960px;max-height:calc(100vh - 40px)',
+      'display:flex;flex-direction:column;overflow:hidden'
+    ].join(';');
+
+    // Modal header
+    const header = document.createElement('div');
+    header.style.cssText = [
+      'display:flex;align-items:center;gap:10px;padding:10px 16px',
+      'border-bottom:1px solid rgba(255,255,255,0.08);background:#271f3e;flex-shrink:0'
+    ].join(';');
+    const title = document.createElement('span');
+    title.style.cssText = 'flex:1;font:800 14px Fredoka,sans-serif;color:#ece6ff';
+    title.textContent = 'Edit — ' + (asset.name || assetId);
+    const btnClose = document.createElement('button');
+    btnClose.textContent = '✕ Close';
+    btnClose.style.cssText = [
+      'font:700 12px Fredoka,sans-serif;color:#ece6ff',
+      'background:#271f3e;border:1px solid rgba(255,255,255,0.18)',
+      'border-radius:8px;padding:6px 12px;cursor:pointer'
+    ].join(';');
+    btnClose.onclick = closeEditModal;
+    header.appendChild(title);
+    header.appendChild(btnClose);
+
+    // Editor host
+    const host = document.createElement('div');
+    host.style.cssText = 'flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden';
+
+    card.appendChild(header);
+    card.appendChild(host);
+    overlay.appendChild(card);
+    overlay.style.display = 'flex';
+
+    // ESC to close
+    overlay._keyHandler = (e) => { if (e.key === 'Escape') closeEditModal(); };
+    document.addEventListener('keydown', overlay._keyHandler);
+
+    // Mount image editor
+    if (!window.ImageEditor || typeof window.ImageEditor.mount !== 'function') {
+      host.innerHTML = '<div style="padding:24px;color:#ef6a6a;font:600 13px Fredoka,sans-serif">ImageEditor not loaded — ensure image-editor.js is included before assets-library.js.</div>';
+      return;
+    }
+
+    const src = assetSrc(asset);
+    const edits = (asset.edits && typeof asset.edits === 'object') ? asset.edits : null;
+
+    _editModalInstance = window.ImageEditor.mount({
+      container: host,
+      src,
+      edits,
+      sourceName: asset.name || assetId,
+      onApply: async ({ edits: newEdits, pngBlob }) => {
+        // Persist edits to asset store
+        try {
+          if (typeof api().update === 'function') {
+            const updates = { edits: newEdits };
+            if (pngBlob) {
+              // Replace underlying image with baked output
+              const dataUrl = await new Promise((res) => {
+                const reader = new FileReader();
+                reader.onload = () => res(reader.result);
+                reader.readAsDataURL(pngBlob);
+              });
+              updates.dataUrl = dataUrl;
+              updates.url = dataUrl;
+            }
+            api().update(assetId, updates);
+          }
+        } catch (err) {
+          console.error('[openEditModal] onApply error', err);
+        }
+        flashToast('Applied');
+        // Keep modal open per feedback rule: feedback_asset_browser_apply_keep_modal
+      },
+      onCancel: closeEditModal,
+      onSliceApply: (payload) => {
+        // Slice: just toast — advanced publish flow not needed in library context
+        flashToast('Slice applied (' + (payload.children || []).length + ' cells)');
+      }
+    });
+  }
+
+  function closeEditModal() {
+    const overlay = document.getElementById('lib-edit-modal-overlay');
+    if (overlay) {
+      if (overlay._keyHandler) document.removeEventListener('keydown', overlay._keyHandler);
+      overlay.style.display = 'none';
+      overlay.innerHTML = '';
+    }
+    if (_editModalInstance && typeof _editModalInstance.destroy === 'function') {
+      try { _editModalInstance.destroy(); } catch (_) {}
+    }
+    _editModalInstance = null;
   }
 
   // ----- Wiring -----
