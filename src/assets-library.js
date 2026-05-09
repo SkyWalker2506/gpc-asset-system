@@ -19,7 +19,7 @@
   const COURSES = (Array.isArray(_UI_CFG.courses) && _UI_CFG.courses.length)
     ? _UI_CFG.courses.slice()
     : ['C1', 'C2', 'C3', 'C4', 'C5', 'C6'];
-  const FALLBACK_VOCAB = ['ui', 'background', 'decoration', 'obstacle', 'character', 'animation', 'ball', 'effect', 'icon'];
+  const FALLBACK_VOCAB = ['ui', 'background', 'decoration', 'obstacle', 'character', 'animation', 'ball', 'effect', 'icon', 'flag', 'hole', 'ground'];
 
   // ----- State -----
   let activeTags = new Set();      // AND-mode tag filters

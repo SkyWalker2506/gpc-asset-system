@@ -26,6 +26,7 @@
   var TAG_VOCAB = (CONFIG.tagVocab && CONFIG.tagVocab.length) ? CONFIG.tagVocab.slice() : [
     'ui', 'background', 'decoration', 'obstacle',
     'character', 'animation', 'ball', 'effect', 'icon',
+    'flag', 'hole', 'ground',
   ];
 
   var listeners = { change: [] };
