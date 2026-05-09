@@ -20,6 +20,7 @@
     ? _UI_CFG.courses.slice()
     : ['C1', 'C2', 'C3', 'C4', 'C5', 'C6'];
   const FALLBACK_VOCAB = ['ui', 'background', 'decoration', 'obstacle', 'character', 'animation', 'ball', 'effect', 'icon', 'flag', 'hole', 'ground'];
+  const SHOW_COLLIDERS_KEY = 'gpc_lib_show_colliders';
 
   // ----- State -----
   let activeTags = new Set();      // AND-mode tag filters
@@ -40,6 +41,9 @@
   let bulkMode = false;
   let bulkSet = new Set();
   let cropDrag = null;             // { handle:'tl'|'br'|... | 'move', startX, startY, orig }
+  let showColliders = false;
+  let manifestParents = {};
+  let defaultColliders = {};
 
   // ----- API shim -----
   // If window.GPC_ASSETS isn't loaded yet, install a tiny placeholder so the
@@ -119,6 +123,207 @@
     if (/(?:effect|fx|particle|sparkle|glow|burst)/.test(f)) tags.add('effect');
     if (/(?:character|hero|enemy|npc|face)/.test(f)) tags.add('character');
     return Array.from(tags);
+  }
+
+  function readBoolLS(key, fallback = false) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw == null) return fallback;
+      if (raw === '1' || raw === 'true') return true;
+      if (raw === '0' || raw === 'false') return false;
+      return fallback;
+    } catch (_) { return fallback; }
+  }
+  function writeBoolLS(key, value) {
+    try { localStorage.setItem(key, value ? '1' : '0'); } catch (_) {}
+  }
+
+  function readAllAssetOverrides() {
+    try {
+      const raw = localStorage.getItem('gpc_asset_overrides');
+      const obj = raw ? JSON.parse(raw) : {};
+      return (obj && typeof obj === 'object') ? obj : {};
+    } catch (_) { return {}; }
+  }
+
+  function loadManifestParents() {
+    return fetch('./manifest.overrides.json?v=' + Date.now(), { cache: 'no-cache' })
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        const map = {};
+        const o = data && data.overrides;
+        if (o && typeof o === 'object') {
+          Object.keys(o).forEach((id) => {
+            const entry = o[id];
+            if (entry && entry.parent) map[id] = entry.parent;
+          });
+        }
+        manifestParents = map;
+      })
+      .catch(() => { manifestParents = {}; });
+  }
+
+  function loadDefaultColliders() {
+    const candidates = [
+      './lib/asset-system/src/default-colliders.json?v=1',
+      './assets/default-colliders.json?v=1'
+    ];
+    const tryAt = (i) => {
+      if (i >= candidates.length) return Promise.resolve({});
+      return fetch(candidates[i], { cache: 'no-cache' })
+        .then((r) => r.ok ? r.json() : null)
+        .then((data) => data && typeof data === 'object' ? data : tryAt(i + 1))
+        .catch(() => tryAt(i + 1));
+    };
+    return tryAt(0).then((obj) => { defaultColliders = obj || {}; });
+  }
+
+  function resolveColliders(asset) {
+    if (!asset || !asset.id) return [];
+
+    const byPath = defaultColliders[asset.path] || defaultColliders['./' + String(asset.path || '')] || [];
+    const byId = defaultColliders[asset.id] || [];
+    const defaults = Array.isArray(byPath) && byPath.length ? byPath : byId;
+
+    // Prefer centralized API when available (handles variants / inheritance).
+    try {
+      const a = api();
+      if (a && typeof a.getAssetOverride === 'function') {
+        const eff = a.getAssetOverride(asset.id, manifestParents || {}) || {};
+        if (Array.isArray(eff.colliders) && eff.colliders.length) {
+          return eff.colliders.map((c) => Object.assign({}, c));
+        }
+      }
+    } catch (_) {}
+
+    // Fallback: manual chain walk on local overrides.
+    const all = readAllAssetOverrides();
+    const seen = new Set();
+    let cur = asset.id;
+    while (cur && !seen.has(cur)) {
+      seen.add(cur);
+      const o = all[cur];
+      if (o && Array.isArray(o.colliders) && o.colliders.length) {
+        return o.colliders.map((c) => Object.assign({}, c));
+      }
+      cur = manifestParents[cur];
+    }
+    return Array.isArray(defaults) ? defaults.map((c) => Object.assign({}, c)) : [];
+  }
+
+  function setColliderToggleButtonState() {
+    const btn = document.getElementById('btn-show-colliders');
+    if (!btn) return;
+    btn.classList.toggle('active', !!showColliders);
+    btn.textContent = showColliders ? 'Hide Colliders' : 'Show Colliders';
+  }
+
+  function drawColliderOverlayForTile(tile, asset) {
+    const wrap = tile.querySelector('.thumb-wrap');
+    const img = wrap && wrap.querySelector('img');
+    const canvas = wrap && wrap.querySelector('.tile-preview-overlay');
+    if (!wrap || !img || !canvas) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const cw = Math.max(1, wrap.clientWidth);
+    const ch = Math.max(1, wrap.clientHeight);
+    canvas.width = Math.floor(cw * dpr);
+    canvas.height = Math.floor(ch * dpr);
+    canvas.style.width = cw + 'px';
+    canvas.style.height = ch + 'px';
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cw, ch);
+
+    const colliders = resolveColliders(asset);
+    if (!Array.isArray(colliders) || !colliders.length) return;
+
+    const spriteW = Number(img.naturalWidth || asset.srcW || asset.w || asset.width || 0);
+    const spriteH = Number(img.naturalHeight || asset.srcH || asset.h || asset.height || 0);
+    if (!(spriteW > 0 && spriteH > 0)) return;
+
+    // Match the <img object-fit: contain> layout inside the inset image box.
+    const boxX = img.offsetLeft;
+    const boxY = img.offsetTop;
+    const boxW = img.clientWidth;
+    const boxH = img.clientHeight;
+    if (!(boxW > 0 && boxH > 0)) return;
+
+    const scale = Math.min(boxW / spriteW, boxH / spriteH);
+    const drawW = spriteW * scale;
+    const drawH = spriteH * scale;
+    const drawX = boxX + (boxW - drawW) / 2;
+    const drawY = boxY + (boxH - drawH) / 2;
+    const centerX = drawX + drawW / 2;
+    const centerY = drawY + drawH / 2;
+
+    colliders.forEach((c) => {
+      const cx = centerX + (Number(c.ox) || 0) * scale;
+      const cy = centerY + (Number(c.oy) || 0) * scale;
+      const isTrigger = c.type === 'trigger';
+      ctx.save();
+      ctx.strokeStyle = isTrigger ? 'rgba(255,190,80,0.95)' : 'rgba(92,170,255,0.95)';
+      ctx.fillStyle = isTrigger ? 'rgba(255,190,80,0.13)' : 'rgba(92,170,255,0.10)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash(isTrigger ? [4, 3] : []);
+
+      if (c.shape === 'circle') {
+        const r = Math.max(2, (Number(c.r) || 24) * scale);
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      } else if (c.shape === 'ellipse') {
+        const rx = Math.max(2, (Number(c.rx) || 30) * scale);
+        const ry = Math.max(2, (Number(c.ry) || 18) * scale);
+        const a = ((Number(c.angle) || 0) * Math.PI) / 180;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, rx, ry, a, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      } else {
+        const rw = Math.max(2, (Number(c.w) || 48) * scale);
+        const rh = Math.max(2, (Number(c.h) || 32) * scale);
+        const a = ((Number(c.angle) || 0) * Math.PI) / 180;
+        ctx.translate(cx, cy);
+        if (a) ctx.rotate(a);
+        ctx.beginPath();
+        ctx.rect(-rw / 2, -rh / 2, rw, rh);
+        ctx.fill();
+        ctx.stroke();
+      }
+      ctx.restore();
+    });
+  }
+
+  function queueTileOverlayRender() {
+    if (!showColliders) return;
+    const grid = document.getElementById('lib-grid');
+    if (!grid) return;
+    const list = filteredAssets();
+    const byId = new Map(list.map((a) => [a.id, a]));
+    requestAnimationFrame(() => {
+      grid.querySelectorAll('.lib-tile[data-id]').forEach((tile) => {
+        const id = tile.dataset.id;
+        const asset = byId.get(id);
+        if (!asset) return;
+        const img = tile.querySelector('.thumb-wrap img');
+        if (!img) return;
+        if (img.complete && img.naturalWidth > 0) {
+          drawColliderOverlayForTile(tile, asset);
+          return;
+        }
+        if (img.dataset.overlayBind === '1') return;
+        img.dataset.overlayBind = '1';
+        const renderOnce = () => {
+          img.dataset.overlayBind = '';
+          drawColliderOverlayForTile(tile, asset);
+        };
+        img.addEventListener('load', renderOnce, { once: true });
+        img.addEventListener('error', () => { img.dataset.overlayBind = ''; }, { once: true });
+      });
+    });
   }
 
   // ----- Filter pipeline -----
@@ -211,6 +416,7 @@
         openEditModal(id);
       });
     });
+    queueTileOverlayRender();
   }
   function tileHtml(a) {
     const id = a.id;
@@ -229,6 +435,7 @@
         <div class="thumb-wrap">
           ${badge}
           <img loading="lazy" src="${escape(src)}" alt="${escape(a.name || id)}"/>
+          ${showColliders ? '<canvas class="tile-preview-overlay" aria-hidden="true"></canvas>' : ''}
         </div>
         <div class="meta">
           <div class="nm">${escape(a.name || id)}</div>
@@ -793,6 +1000,17 @@
       showHidden = e.target.checked; renderGrid();
     });
 
+    // Collider overlay toggle
+    const collBtn = document.getElementById('btn-show-colliders');
+    if (collBtn) {
+      collBtn.addEventListener('click', () => {
+        showColliders = !showColliders;
+        writeBoolLS(SHOW_COLLIDERS_KEY, showColliders);
+        setColliderToggleButtonState();
+        renderGrid();
+      });
+    }
+
     // Upload (button + drag-drop overlay)
     const fileAdd = document.getElementById('file-add');
     document.getElementById('btn-upload').addEventListener('click', () => fileAdd.click());
@@ -938,6 +1156,7 @@
 
     // Resize → re-render preview
     window.addEventListener('resize', renderPreviewCanvas);
+    window.addEventListener('resize', queueTileOverlayRender);
   }
 
   // ----- Live updates -----
@@ -961,6 +1180,8 @@
 
   // ----- Boot -----
   async function boot() {
+    showColliders = readBoolLS(SHOW_COLLIDERS_KEY, false);
+    setColliderToggleButtonState();
     bindUI();
     bindCropCanvas();
     renderTagFilterChips();
@@ -972,6 +1193,7 @@
       return;
     }
     try { await migrateLegacy(); } catch (e) { console.warn('[lib] migration error', e); }
+    await Promise.all([loadManifestParents(), loadDefaultColliders()]);
     subscribe();
     renderGrid();
     renderEditPanel();
