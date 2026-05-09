@@ -80,6 +80,58 @@
     return result;
   }
 
+  function normalizeLookupToken(value) {
+    if (value == null) return '';
+    var s = String(value).trim();
+    if (!s) return '';
+    s = s.split('#')[0].split('?')[0];
+    s = s.replace(/^\.\//, '');
+    s = s.replace(/^\/+/, '');
+    return s;
+  }
+
+  // Resolve native source size for an asset by id/path/name.
+  // Returns {w,h} when manifest has a usable size, else null.
+  function getAssetNativeSize(name_or_path) {
+    var token = normalizeLookupToken(name_or_path);
+    if (!token) return null;
+    var tokenLc = token.toLowerCase();
+    var tokenAsId = token.indexOf(':') >= 0
+      ? token
+      : token.replace(/\.png$/i, '').replace(/\//g, ':');
+
+    var pool = allAssets();
+    var byIdOrPath = null;
+    var byName = null;
+
+    for (var i = 0; i < pool.length; i++) {
+      var a = pool[i];
+      var aId = normalizeLookupToken(a && a.id);
+      var aPath = normalizeLookupToken(a && a.path);
+      var aPathLc = aPath.toLowerCase();
+      var aName = String((a && a.name) || '').trim().toLowerCase();
+      if (!byIdOrPath && (
+        aId === token ||
+        aId === tokenAsId ||
+        aPath === token ||
+        aPathLc === tokenLc
+      )) {
+        byIdOrPath = a;
+      }
+      if (!byName && aName && aName === tokenLc) {
+        byName = a;
+      }
+      if (byIdOrPath && byName) break;
+    }
+
+    var hit = byIdOrPath || byName;
+    if (!hit) return null;
+    var w = Number(hit.w);
+    var h = Number(hit.h);
+    if (!Number.isFinite(w) || !Number.isFinite(h)) return null;
+    return (w + h > 0) ? { w: w, h: h } : null;
+  }
+
   // ----- public API -----
   function list(opts) {
     opts = opts || {};
@@ -254,6 +306,7 @@
     add: add,
     on: on,
     getAssetOverride: getAssetOverride,
+    getAssetNativeSize: getAssetNativeSize,
     TAG_VOCAB: TAG_VOCAB,
     ready: function () { return readyPromise || init(); },
     isReady: function () { return ready; },
