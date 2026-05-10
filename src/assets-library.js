@@ -165,8 +165,8 @@
 
   function loadDefaultColliders() {
     const candidates = [
-      './lib/asset-system/src/default-colliders.json?v=1',
-      './assets/default-colliders.json?v=1'
+      './lib/asset-system/src/default-colliders.json?v=2',
+      './assets/default-colliders.json?v=2'
     ];
     const tryAt = (i) => {
       if (i >= candidates.length) return Promise.resolve({});
@@ -180,6 +180,23 @@
 
   function resolveColliders(asset) {
     if (!asset || !asset.id) return [];
+    const toPx = (c) => {
+      if (!c || typeof c !== 'object') return c;
+      if (c.units !== 'ratio') return Object.assign({}, c);
+      const sw = Number(asset.w || asset.width || 0) || 0;
+      const sh = Number(asset.h || asset.height || 0) || 0;
+      const maxSide = Math.max(sw, sh) || 1;
+      const out = Object.assign({}, c);
+      if (out.ox != null) out.ox = (Number(out.ox) || 0) * sw;
+      if (out.oy != null) out.oy = (Number(out.oy) || 0) * sh;
+      if (out.r != null) out.r = (Number(out.r) || 0) * maxSide;
+      if (out.w != null) out.w = (Number(out.w) || 0) * sw;
+      if (out.h != null) out.h = (Number(out.h) || 0) * sh;
+      if (out.rx != null) out.rx = (Number(out.rx) || 0) * sw;
+      if (out.ry != null) out.ry = (Number(out.ry) || 0) * sh;
+      delete out.units;
+      return out;
+    };
 
     const byPath = defaultColliders[asset.path] || defaultColliders['./' + String(asset.path || '')] || [];
     const byId = defaultColliders[asset.id] || [];
@@ -191,7 +208,7 @@
       if (a && typeof a.getAssetOverride === 'function') {
         const eff = a.getAssetOverride(asset.id, manifestParents || {}) || {};
         if (Array.isArray(eff.colliders) && eff.colliders.length) {
-          return eff.colliders.map((c) => Object.assign({}, c));
+          return eff.colliders.map(toPx);
         }
       }
     } catch (_) {}
@@ -204,11 +221,11 @@
       seen.add(cur);
       const o = all[cur];
       if (o && Array.isArray(o.colliders) && o.colliders.length) {
-        return o.colliders.map((c) => Object.assign({}, c));
+        return o.colliders.map(toPx);
       }
       cur = manifestParents[cur];
     }
-    return Array.isArray(defaults) ? defaults.map((c) => Object.assign({}, c)) : [];
+    return Array.isArray(defaults) ? defaults.map(toPx) : [];
   }
 
   function setColliderToggleButtonState() {
@@ -338,6 +355,11 @@
     catch (e) { console.warn('[lib] GPC_ASSETS.list failed', e); list = []; }
     if (courseFilter === 'none') list = list.filter(x => !x.course);
     if (!showHidden) list = list.filter(x => !x.hidden);
+    // Hide variant assets (those with a parent) from the main grid.
+    // They are accessible via the parent tile's "N variants" badge/expand.
+    if (Object.keys(manifestParents).length) {
+      list = list.filter(x => !manifestParents[x.id]);
+    }
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       list = list.filter(x => {
@@ -418,6 +440,14 @@
     });
     queueTileOverlayRender();
   }
+  function variantCountForAsset(id) {
+    let count = 0;
+    for (const parentId of Object.values(manifestParents)) {
+      if (parentId === id) count++;
+    }
+    return count;
+  }
+
   function tileHtml(a) {
     const id = a.id;
     const sel = id === selectedId;
@@ -427,7 +457,9 @@
     const w = a.srcW || a.w || a.width || 0;
     const h = a.srcH || a.h || a.height || 0;
     const tags = (a.tags || []).slice(0, 4).map(t => `<span class="ttag">${escape(t)}</span>`).join('');
-    const badge = a.course ? `<span class="badge">C${a.course}</span>` : (a.kind === 'animation' || (a.tags||[]).includes('animation') ? `<span class="badge">anim</span>` : '');
+    const varCount = variantCountForAsset(id);
+    const varBadge = varCount > 0 ? `<span class="badge badge-variant">${varCount} variants</span>` : '';
+    const badge = varBadge || (a.course ? `<span class="badge">C${a.course}</span>` : (a.kind === 'animation' || (a.tags||[]).includes('animation') ? `<span class="badge">anim</span>` : ''));
     return `
       <button class="lib-tile${sel ? ' selected' : ''}${checked ? ' bulk-checked' : ''}${hidden ? ' hidden-asset' : ''}" data-id="${escape(id)}" title="${escape(a.name || id)}">
         <span class="bulk-tick"></span>

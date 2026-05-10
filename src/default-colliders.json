@@ -264,8 +264,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-2-endgame/hole-rim-c1.png": [
@@ -273,8 +273,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-2-endgame/hole-rim-c2.png": [
@@ -282,8 +282,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-2-endgame/hole-rim-c3.png": [
@@ -291,8 +291,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-2-endgame/hole-rim-c4.png": [
@@ -300,8 +300,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-2-endgame/hole-rim-c5.png": [
@@ -309,8 +309,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-3-bg-identity/c2-wind-river-still.png": [
@@ -369,8 +369,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-holes-v1/c2-hole-cloud.png": [
@@ -378,8 +378,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-holes-v1/c3-hole-crystal.png": [
@@ -387,8 +387,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-holes-v1/c4-hole-neon.png": [
@@ -396,8 +396,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-holes-v1/c5-hole-candy.png": [
@@ -405,8 +405,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-holes-v2/c1-hole-grass-v3.png": [
@@ -414,8 +414,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-holes-v2/c2-hole-cloud-v2.png": [
@@ -423,8 +423,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-holes-v2/c3-hole-crystal-v2.png": [
@@ -432,8 +432,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-holes-v2/c4-hole-neon-v2.png": [
@@ -441,8 +441,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch16/atlas-holes-v2/c5-hole-candy-v2.png": [
@@ -450,8 +450,8 @@
       "shape": "circle",
       "type": "trigger",
       "ox": 0,
-      "oy": -10,
-      "r": 30
+      "oy": 0,
+      "r": 40
     }
   ],
   "assets/sliced/batch3/c2-portal-ring-blue.png": [
