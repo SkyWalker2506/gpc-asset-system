@@ -21,6 +21,8 @@
     : ['C1', 'C2', 'C3', 'C4', 'C5', 'C6'];
   const FALLBACK_VOCAB = ['ui', 'background', 'decoration', 'obstacle', 'character', 'animation', 'ball', 'effect', 'icon', 'flag', 'hole', 'ground'];
   const SHOW_COLLIDERS_KEY = 'gpc_lib_show_colliders';
+  const FILTER_STATE_KEY = 'gpc_lib_filter_state_v1';
+  const SELECTED_ID_KEY = 'gpc_lib_selected_id_v1';
 
   // ----- State -----
   let activeTags = new Set();      // AND-mode tag filters
@@ -136,6 +138,42 @@
   }
   function writeBoolLS(key, value) {
     try { localStorage.setItem(key, value ? '1' : '0'); } catch (_) {}
+  }
+
+  // ----- Filter / selection state persistence (per memory: must restore on hard reload) -----
+  function saveFilterState() {
+    try {
+      localStorage.setItem(FILTER_STATE_KEY, JSON.stringify({
+        searchQuery: searchQuery || '',
+        courseFilter: courseFilter || 'all',
+        showHidden: !!showHidden,
+        activeTags: Array.from(activeTags)
+      }));
+    } catch (_) {}
+  }
+  function loadFilterState() {
+    try {
+      const raw = localStorage.getItem(FILTER_STATE_KEY);
+      if (!raw) return;
+      const obj = JSON.parse(raw);
+      if (!obj || typeof obj !== 'object') return;
+      if (typeof obj.searchQuery === 'string') searchQuery = obj.searchQuery;
+      if (typeof obj.courseFilter === 'string') courseFilter = obj.courseFilter;
+      if (typeof obj.showHidden === 'boolean') showHidden = obj.showHidden;
+      if (Array.isArray(obj.activeTags)) activeTags = new Set(obj.activeTags);
+    } catch (_) {}
+  }
+  function saveSelectedId() {
+    try {
+      if (selectedId) localStorage.setItem(SELECTED_ID_KEY, selectedId);
+      else localStorage.removeItem(SELECTED_ID_KEY);
+    } catch (_) {}
+  }
+  function loadSelectedId() {
+    try {
+      const v = localStorage.getItem(SELECTED_ID_KEY);
+      if (v) selectedId = v;
+    } catch (_) {}
   }
 
   function readAllAssetOverrides() {
@@ -383,6 +421,7 @@
       el.addEventListener('click', () => {
         const t = el.dataset.tag;
         if (activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
+        saveFilterState();
         renderTagFilterChips();
         renderGrid();
       });
@@ -432,6 +471,7 @@
           return;
         }
         selectedId = id;
+        saveSelectedId();
         cropDrag = null;
         renderGrid();
         renderEditPanel();
@@ -1021,15 +1061,23 @@
   function bindUI() {
     // Search
     const search = document.getElementById('q-search');
-    search.addEventListener('input', () => { searchQuery = search.value.trim(); renderGrid(); });
+    if (searchQuery) search.value = searchQuery;
+    search.addEventListener('input', () => { searchQuery = search.value.trim(); saveFilterState(); renderGrid(); });
 
     // Course filter
     const cf = document.getElementById('course-filter');
-    cf.addEventListener('change', () => { courseFilter = normalizeCourse(cf.value); renderGrid(); });
+    if (courseFilter && courseFilter !== 'all') {
+      // courseFilter is stored as '1'..'6'/'none'/'all'; UI <option> values are 'C1' / 'none' / 'all'
+      const opt = (courseFilter === 'all' || courseFilter === 'none') ? courseFilter : ('C' + courseFilter);
+      if (Array.from(cf.options).some(o => o.value === opt)) cf.value = opt;
+    }
+    cf.addEventListener('change', () => { courseFilter = normalizeCourse(cf.value); saveFilterState(); renderGrid(); });
 
     // Show hidden
-    document.getElementById('show-hidden').addEventListener('change', (e) => {
-      showHidden = e.target.checked; renderGrid();
+    const showHiddenEl = document.getElementById('show-hidden');
+    if (showHidden) showHiddenEl.checked = true;
+    showHiddenEl.addEventListener('change', (e) => {
+      showHidden = e.target.checked; saveFilterState(); renderGrid();
     });
 
     // Collider overlay toggle
@@ -1140,6 +1188,7 @@
       if (isUpload && typeof api().remove === 'function') {
         api().remove(a.id);
         selectedId = null;
+        saveSelectedId();
       } else {
         api().update(a.id, { hidden: true });
       }
@@ -1213,6 +1262,8 @@
   // ----- Boot -----
   async function boot() {
     showColliders = readBoolLS(SHOW_COLLIDERS_KEY, false);
+    loadFilterState();
+    loadSelectedId();
     setColliderToggleButtonState();
     bindUI();
     bindCropCanvas();
